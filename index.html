@@ -5,21 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Сюрприз!</title>
     <style>
-        body { margin: 0; font-family: 'Arial', sans-serif; background: #1a1a1a; color: white; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center; }
-        .step { display: none; }
+        body { margin: 0; font-family: 'Arial', sans-serif; background: #121212; color: white; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center; }
+        .step { display: none; width: 100%; }
         .active { display: block; }
-        button { padding: 15px 30px; font-size: 1.2rem; cursor: pointer; border: none; border-radius: 10px; margin: 10px; transition: 0.3s; }
-        .btn-next { background: #ff4d4d; color: white; }
-        .btn-move { background: #555; color: white; position: absolute; }
         
-        /* Сердце */
-        #heart-container { position: relative; width: 300px; height: 300px; margin: 0 auto; }
-        .heart-text { position: absolute; color: #ff4d4d; font-weight: bold; animation: pulse 1.5s infinite; }
+        button { padding: 15px 30px; font-size: 1.2rem; cursor: pointer; border: none; border-radius: 10px; margin: 10px; transition: 0.3s; font-weight: bold; }
+        .btn-next { background: #ff4d4d; color: white; box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3); }
+        .btn-move { background: #444; color: white; position: absolute; }
+        
+        /* Большое Сердце */
+        #heart-container { position: relative; width: 600px; height: 500px; margin: 0 auto; }
+        .heart-text { position: absolute; color: #ff4d4d; font-weight: bold; animation: pulse 1.5s infinite; white-space: nowrap; }
+        
+        /* Лепестки лилий */
+        .petal { position: absolute; top: -50px; color: #ff3333; pointer-events: none; animation: fall linear forwards; }
+
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.15); opacity: 1; text-shadow: 0 0 15px #ff4d4d; }
+            100% { transform: scale(1); opacity: 0.8; }
         }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        .final-text { margin-top: 50px; animation: fadeIn 2s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -32,21 +44,29 @@
 
     <div id="step2" class="step">
         <h1>Сасала?</h1>
-        <button id="noBtn" class="btn-move" onmouseover="moveButton()" onclick="moveButton()">Нэ</button>
-        <button class="btn-next" style="margin-top: 100px;" onclick="nextStep(3)">Дэ</button>
+        <div style="height: 150px; position: relative;">
+            <button id="noBtn" class="btn-move" onmouseover="moveButton()" onclick="moveButton()">Нэ</button>
+            <button class="btn-next" style="margin-top: 80px;" onclick="nextStep(3)">Дэ</button>
+        </div>
     </div>
 
     <div id="step3" class="step">
         <div id="heart-container"></div>
-        <h2 style="margin-top: 20px;">Я тебя люблю! ❤️</h2>
-        <p>С 8 марта, вредина!</p>
+        <div class="final-text">
+            <h2 style="color: #ff4d4d; font-size: 2.5rem;">Я тебя люблю! ❤️</h2>
+            <p style="font-size: 1.3rem;">С 8 марта, моя любимая вредина!</p>
+            <p style="opacity: 0.6;">(Я знаю, что ты любишь красные лилии, поэтому они везде)</p>
+        </div>
     </div>
 
     <script>
         function nextStep(step) {
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             document.getElementById('step' + step).classList.add('active');
-            if(step === 3) createHeart();
+            if(step === 3) {
+                createHeart();
+                setInterval(createPetal, 300); // Дождь из лепестков
+            }
         }
 
         function moveButton() {
@@ -59,22 +79,38 @@
 
         function createHeart() {
             const container = document.getElementById('heart-container');
-            const words = "I LOVE YOU";
-            for (let i = 0; i < 30; i++) {
+            const words = ["I LOVE YOU", "⚜️", "ЛИЛИИ", "❤️"]; 
+            const totalElements = 80; // Увеличил количество элементов для плотности
+
+            for (let i = 0; i < totalElements; i++) {
                 const span = document.createElement('span');
-                span.innerText = words;
+                span.innerText = words[i % words.length];
                 span.className = 'heart-text';
                 
-                // Формула сердца
-                const t = (i / 30) * 2 * Math.PI;
-                const x = 160 * Math.pow(Math.sin(t), 3);
-                const y = -(130 * Math.cos(t) - 50 * Math.cos(2*t) - 20 * Math.cos(3*t) - 10 * Math.cos(4*t));
+                const t = (i / totalElements) * 2 * Math.PI;
+                // Формула сердца (увеличенная)
+                const x = 180 * Math.pow(Math.sin(t), 3);
+                const y = -(150 * Math.cos(t) - 60 * Math.cos(2*t) - 30 * Math.cos(3*t) - 15 * Math.cos(4*t));
                 
-                span.style.left = (150 + x/1.5) + 'px';
-                span.style.top = (150 + y/1.5) + 'px';
-                span.style.fontSize = Math.random() * (15 - 10) + 10 + 'px';
+                // Центрирование (300 - середина контейнера по X, 200 по Y)
+                span.style.left = (300 + x * 1.4) + 'px';
+                span.style.top = (220 + y * 1.4) + 'px';
+                span.style.fontSize = Math.random() * (20 - 12) + 12 + 'px';
+                span.style.animationDelay = (Math.random() * 2) + 's';
+                
                 container.appendChild(span);
             }
+        }
+
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            petal.innerHTML = '⚜️'; // Символ лилии
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.fontSize = Math.random() * 20 + 15 + 'px';
+            petal.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(petal);
+            setTimeout(() => petal.remove(), 5000);
         }
     </script>
 </body>
