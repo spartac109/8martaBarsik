@@ -5,89 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Сюрприз!</title>
     <style>
-        body { margin: 0; font-family: 'Arial', sans-serif; background: #1a1a1a; color: white; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center; }
+        body { 
+            margin: 0; 
+            font-family: 'Arial', sans-serif; 
+            background: #1a1a1a; 
+            color: white; 
+            overflow: hidden; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            text-align: center; 
+        }
         .step { display: none; }
         .active { display: block; }
-        button { padding: 15px 30px; font-size: 1.2rem; cursor: pointer; border: none; border-radius: 10px; margin: 10px; transition: 0.3s; }
+        button { 
+            padding: 15px 30px; 
+            font-size: 1.2rem; 
+            cursor: pointer; 
+            border: none; 
+            border-radius: 10px; 
+            margin: 10px; 
+            transition: 0.3s; 
+        }
         .btn-next { background: #ff4d4d; color: white; }
         .btn-next:hover { background: #ff3333; transform: scale(1.05); }
         .btn-move { background: #555; color: white; position: absolute; }
         
         /* Сердце */
-        #heart-container { position: relative; width: 400px; height: 400px; margin: 0 auto; }
+        #heart-container { 
+            position: relative; 
+            width: 600px; 
+            height: 550px; 
+            margin: 0 auto; 
+        }
         .heart-text { 
             position: absolute; 
             color: #ff4d4d; 
             font-weight: bold; 
+            font-size: 20px;
             animation: heartBeat 2s ease-in-out infinite;
-            text-shadow: 0 0 10px rgba(255, 77, 77, 0.8);
+            text-shadow: 0 0 20px rgba(255, 77, 77, 1), 0 0 40px rgba(255, 77, 77, 0.6);
+            white-space: nowrap;
         }
         
         @keyframes heartBeat {
-            0%, 100% { transform: scale(1); opacity: 0.8; }
-            25% { transform: scale(1.15); opacity: 1; }
-            50% { transform: scale(1); opacity: 0.9; }
-            75% { transform: scale(1.1); opacity: 1; }
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            25% { transform: scale(1.12); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.95; }
+            75% { transform: scale(1.08); opacity: 1; }
         }
         
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-8px); }
         }
         
         /* Кнопка внизу */
-    <div id="step3" class="step">
-        <div id="heart-container"></div>
-        <h2 style="margin-top: 20px;">Я тебя люблю! ❤️</h2>
-        <p>С 8 марта, вредина!</p>
-        <button class="bottom-btn" onclick="showModal()">Ты дибил</button>
-    </div>
-    
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <h2>😏</h2>
-            <p style="font-size: 1.3rem; line-height: 1.6;">Ты сама такая! 💕</p>
-            <p style="font-size: 0.9rem; color: #aaa; margin-top: 15px;">Но я все равно тебя люблю 😘</p>
-            <button class="close-modal" onclick="closeModal()">Закрыть</button>
-        </div>
-    </div>  transform: translateX(-50%);
+        .bottom-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
             background: linear-gradient(45deg, #ff4d4d, #ff1744);
             color: white;
             padding: 12px 25px;
             font-size: 1rem;
             border: 2px solid #ff4d4d;
             border-radius: 25px;
-        function createHeart() {
-            const container = document.getElementById('heart-container');
-            const words = "I LOVE YOU";
-            
-            for (let i = 0; i < 40; i++) {
-                const span = document.createElement('span');
-                span.innerText = words;
-                span.className = 'heart-text';
-                
-                // Формула сердца (улучшенная)
-                const t = (i / 40) * 2 * Math.PI;
-                const x = 160 * Math.pow(Math.sin(t), 3);
-                const y = -(130 * Math.cos(t) - 50 * Math.cos(2*t) - 20 * Math.cos(3*t) - 10 * Math.cos(4*t));
-                
-                span.style.left = (200 + x) + 'px';
-                span.style.top = (200 + y) + 'px';
-                span.style.fontSize = (12 + Math.random() * 6) + 'px';
-                span.style.animationDelay = (i * 0.05) + 's';
-                span.style.animation = `heartBeat 2s ease-in-out infinite ${i * 0.05}s, float 3s ease-in-out infinite ${i * 0.1}s`;
-                
-                container.appendChild(span);
-            }
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.4);
         }
         
-        function showModal() {
-            document.getElementById('modal').style.display = 'flex';
+        .bottom-btn:hover {
+            transform: translateX(-50%) scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 77, 77, 0.6);
         }
         
-        function closeModal() {
-            document.getElementById('modal').style.display = 'none';
-        }   background: rgba(0, 0, 0, 0.8);
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -146,6 +150,16 @@
         <div id="heart-container"></div>
         <h2 style="margin-top: 20px;">Я тебя люблю! ❤️</h2>
         <p>С 8 марта, вредина!</p>
+        <button class="bottom-btn" onclick="showModal()">Ты дибил</button>
+    </div>
+    
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2>😏</h2>
+            <p style="font-size: 1.3rem; line-height: 1.6;">Ты сама такая! 💕</p>
+            <p style="font-size: 0.9rem; color: #aaa; margin-top: 15px;">Но я все равно тебя люблю 😘</p>
+            <button class="close-modal" onclick="closeModal()">Закрыть</button>
+        </div>
     </div>
 
     <script>
@@ -166,21 +180,33 @@
         function createHeart() {
             const container = document.getElementById('heart-container');
             const words = "I LOVE YOU";
-            for (let i = 0; i < 30; i++) {
+            const numPoints = 22;
+            
+            for (let i = 0; i < numPoints; i++) {
                 const span = document.createElement('span');
                 span.innerText = words;
                 span.className = 'heart-text';
                 
-                // Формула сердца
-                const t = (i / 30) * 2 * Math.PI;
-                const x = 160 * Math.pow(Math.sin(t), 3);
-                const y = -(130 * Math.cos(t) - 50 * Math.cos(2*t) - 20 * Math.cos(3*t) - 10 * Math.cos(4*t));
+                // Формула сердца (увеличенная и четкая)
+                const t = (i / numPoints) * 2 * Math.PI;
+                const scale = 1.5;
+                const x = scale * 160 * Math.pow(Math.sin(t), 3);
+                const y = scale * -(130 * Math.cos(t) - 50 * Math.cos(2*t) - 20 * Math.cos(3*t) - 10 * Math.cos(4*t));
                 
-                span.style.left = (150 + x/1.5) + 'px';
-                span.style.top = (150 + y/1.5) + 'px';
-                span.style.fontSize = Math.random() * (15 - 10) + 10 + 'px';
+                span.style.left = (300 + x) + 'px';
+                span.style.top = (250 + y) + 'px';
+                span.style.animationDelay = (i * 0.09) + 's';
+                
                 container.appendChild(span);
             }
+        }
+        
+        function showModal() {
+            document.getElementById('modal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
         }
     </script>
 </body>
