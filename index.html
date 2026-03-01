@@ -3,65 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сюрприз для тебя!</title>
+    <title>Сюрприз!</title>
     <style>
-        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; color: white; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center; }
-        .step { display: none; width: 90%; max-width: 400px; }
-        .active { display: block; animation: fadeIn 0.8s ease-in; }
+        body { margin: 0; font-family: 'Arial', sans-serif; background: #1a1a1a; color: white; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center; }
+        .step { display: none; }
+        .active { display: block; }
+        button { padding: 15px 30px; font-size: 1.2rem; cursor: pointer; border: none; border-radius: 10px; margin: 10px; transition: 0.3s; }
+        .btn-next { background: #ff4d4d; color: white; }
+        .btn-move { background: #555; color: white; position: absolute; }
         
-        h1 { font-size: 3rem; margin-bottom: 20px; text-shadow: 2px 2px 10px rgba(255, 77, 77, 0.5); }
-        button { padding: 15px 30px; font-size: 1.2rem; cursor: pointer; border: none; border-radius: 50px; margin: 10px; transition: 0.3s; font-weight: bold; }
-        
-        .btn-red { background: #ff4d4d; color: white; box-shadow: 0 4px 15px rgba(255, 77, 77, 0.4); }
-        .btn-red:hover { transform: scale(1.05); background: #ff3333; }
-        .btn-move { background: #333; color: #aaa; position: absolute; z-index: 10; }
-
-        /* Финальный экран */
-        #step3 { position: relative; z-index: 5; }
-        .lily-card { background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 77, 77, 0.3); box-shadow: 0 0 30px rgba(255, 0, 0, 0.2); }
-        .lily-card h2 { color: #ff4d4d; margin-top: 0; }
-
-        /* Анимация лепестков/лилий */
-        .lily-petal { position: absolute; top: -50px; pointer-events: none; z-index: 1; font-size: 30px; animation: fall linear forwards; }
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(360deg); }
+        /* Сердце */
+        #heart-container { position: relative; width: 300px; height: 300px; margin: 0 auto; }
+        .heart-text { position: absolute; color: #ff4d4d; font-weight: bold; animation: pulse 1.5s infinite; }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <div id="step1" class="step active">
         <h1>Хуй те!</h1>
-        <p>Ну ладно, я сегодня добрый...</p>
-        <button class="btn-red" onclick="nextStep(2)">Нажми, если смелая</button>
+        <p>...ну ладно, шучу)</p>
+        <button class="btn-next" onclick="nextStep(2)">Нажми сюда</button>
     </div>
 
     <div id="step2" class="step">
         <h1>Сасала?</h1>
-        <div style="height: 150px; position: relative;">
-            <button id="noBtn" class="btn-move" onmouseover="moveButton()" onclick="moveButton()">Нэ</button>
-            <button class="btn-red" style="margin-top: 60px;" onclick="nextStep(3)">Дэ</button>
-        </div>
+        <button id="noBtn" class="btn-move" onmouseover="moveButton()" onclick="moveButton()">Нэ</button>
+        <button class="btn-next" style="margin-top: 100px;" onclick="nextStep(3)">Дэ</button>
     </div>
 
     <div id="step3" class="step">
-        <div class="lily-card">
-            <h2>С 8 Марта! ❤️</h2>
-            <p>Ты любишь красные лилии, а я люблю тебя (и иногда бесить тебя тоже люблю).</p>
-            <p style="font-size: 0.9rem; opacity: 0.8;">P.S. Ты самая лучшая, вредина.</p>
-        </div>
+        <div id="heart-container"></div>
+        <h2 style="margin-top: 20px;">Я тебя люблю! ❤️</h2>
+        <p>С 8 марта, вредина!</p>
     </div>
 
     <script>
         function nextStep(step) {
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             document.getElementById('step' + step).classList.add('active');
-            
-            if(step === 3) {
-                document.body.style.background = "radial-gradient(circle, #2c0505 0%, #121212 100%)";
-                setInterval(createLily, 300); // Запускаем дождь из лилий
-            }
+            if(step === 3) createHeart();
         }
 
         function moveButton() {
@@ -72,18 +57,24 @@
             btn.style.top = y + 'px';
         }
 
-        function createLily() {
-            const lily = document.createElement('div');
-            lily.className = 'lily-petal';
-            // Используем эмодзи лилии или цветка (🌺 или ⚜️)
-            lily.innerHTML = '⚜️'; 
-            lily.style.left = Math.random() * 100 + 'vw';
-            lily.style.animationDuration = Math.random() * 3 + 2 + 's';
-            lily.style.opacity = Math.random();
-            lily.style.color = 'red'; // Красим наш "цветок"
-            document.body.appendChild(lily);
-            
-            setTimeout(() => { lily.remove(); }, 5000);
+        function createHeart() {
+            const container = document.getElementById('heart-container');
+            const words = "I LOVE YOU";
+            for (let i = 0; i < 30; i++) {
+                const span = document.createElement('span');
+                span.innerText = words;
+                span.className = 'heart-text';
+                
+                // Формула сердца
+                const t = (i / 30) * 2 * Math.PI;
+                const x = 160 * Math.pow(Math.sin(t), 3);
+                const y = -(130 * Math.cos(t) - 50 * Math.cos(2*t) - 20 * Math.cos(3*t) - 10 * Math.cos(4*t));
+                
+                span.style.left = (150 + x/1.5) + 'px';
+                span.style.top = (150 + y/1.5) + 'px';
+                span.style.fontSize = Math.random() * (15 - 10) + 10 + 'px';
+                container.appendChild(span);
+            }
         }
     </script>
 </body>
