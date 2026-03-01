@@ -10,15 +10,121 @@
         .active { display: block; }
         button { padding: 15px 30px; font-size: 1.2rem; cursor: pointer; border: none; border-radius: 10px; margin: 10px; transition: 0.3s; }
         .btn-next { background: #ff4d4d; color: white; }
+        .btn-next:hover { background: #ff3333; transform: scale(1.05); }
         .btn-move { background: #555; color: white; position: absolute; }
         
         /* Сердце */
-        #heart-container { position: relative; width: 300px; height: 300px; margin: 0 auto; }
-        .heart-text { position: absolute; color: #ff4d4d; font-weight: bold; animation: pulse 1.5s infinite; }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        #heart-container { position: relative; width: 400px; height: 400px; margin: 0 auto; }
+        .heart-text { 
+            position: absolute; 
+            color: #ff4d4d; 
+            font-weight: bold; 
+            animation: heartBeat 2s ease-in-out infinite;
+            text-shadow: 0 0 10px rgba(255, 77, 77, 0.8);
+        }
+        
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            25% { transform: scale(1.15); opacity: 1; }
+            50% { transform: scale(1); opacity: 0.9; }
+            75% { transform: scale(1.1); opacity: 1; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Кнопка внизу */
+    <div id="step3" class="step">
+        <div id="heart-container"></div>
+        <h2 style="margin-top: 20px;">Я тебя люблю! ❤️</h2>
+        <p>С 8 марта, вредина!</p>
+        <button class="bottom-btn" onclick="showModal()">Ты дибил</button>
+    </div>
+    
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2>😏</h2>
+            <p style="font-size: 1.3rem; line-height: 1.6;">Ты сама такая! 💕</p>
+            <p style="font-size: 0.9rem; color: #aaa; margin-top: 15px;">Но я все равно тебя люблю 😘</p>
+            <button class="close-modal" onclick="closeModal()">Закрыть</button>
+        </div>
+    </div>  transform: translateX(-50%);
+            background: linear-gradient(45deg, #ff4d4d, #ff1744);
+            color: white;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border: 2px solid #ff4d4d;
+            border-radius: 25px;
+        function createHeart() {
+            const container = document.getElementById('heart-container');
+            const words = "I LOVE YOU";
+            
+            for (let i = 0; i < 40; i++) {
+                const span = document.createElement('span');
+                span.innerText = words;
+                span.className = 'heart-text';
+                
+                // Формула сердца (улучшенная)
+                const t = (i / 40) * 2 * Math.PI;
+                const x = 160 * Math.pow(Math.sin(t), 3);
+                const y = -(130 * Math.cos(t) - 50 * Math.cos(2*t) - 20 * Math.cos(3*t) - 10 * Math.cos(4*t));
+                
+                span.style.left = (200 + x) + 'px';
+                span.style.top = (200 + y) + 'px';
+                span.style.fontSize = (12 + Math.random() * 6) + 'px';
+                span.style.animationDelay = (i * 0.05) + 's';
+                span.style.animation = `heartBeat 2s ease-in-out infinite ${i * 0.05}s, float 3s ease-in-out infinite ${i * 0.1}s`;
+                
+                container.appendChild(span);
+            }
+        }
+        
+        function showModal() {
+            document.getElementById('modal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }   background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: #2a2a2a;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            animation: modalAppear 0.3s ease-out;
+            border: 2px solid #ff4d4d;
+        }
+        
+        @keyframes modalAppear {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .modal h2 {
+            color: #ff4d4d;
+            margin-bottom: 20px;
+        }
+        
+        .close-modal {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        .close-modal:hover {
+            background: #ff3333;
         }
     </style>
 </head>
